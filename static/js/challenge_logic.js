@@ -1,21 +1,21 @@
 // Add console.log to check to see if our code is working.
 console.log("working");
 
-// We create the tile layer that will be the background of our map.
+// Create the tile layer that will be the background of our map.
 let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
 	maxZoom: 18,
 	accessToken: API_KEY
 });
 
-// We create the second tile layer that will be the background of our map.
+// Create the second tile layer that will be the background of our map.
 let satelliteStreets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
 	maxZoom: 18,
 	accessToken: API_KEY
 });
 
-// We create a third tile layer that will be the background of our map.
+// Create a third tile layer that will be the background of our map.
 let light = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
 	maxZoom: 18,
@@ -41,14 +41,14 @@ let allEarthquakes = new L.LayerGroup();
 let largeEarthquakes  = new L.LayerGroup();
 let tectonicplates = new L.LayerGroup();
 
-// We define an object contains all of our overlays.
+// Define an object contains all of our overlays.
 // This overlay will be visible all the time.
 let overlays = {
   "Tectonic Plates": tectonicplates,
   "Earthquakes": allEarthquakes
 };
 
-// Then we add a control to the map that will allow the user to change which
+// Add a control to the map that will allow the user to change which
 // layers are visible.
 L.control.layers(baseMaps, overlays).addTo(map);
 
@@ -59,7 +59,7 @@ L.control.layers(baseMaps, overlays).addTo(map);
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson").then(function(data) {
 
   // This function returns the style data for each of the earthquakes we plot on
-  // the map. We pass the magnitude of the earthquake into two separate functions
+  // the map. Pass the magnitude of the earthquake into two separate functions
   // to calculate the color and radius.
   function styleInfo(feature) {
     return {
@@ -102,32 +102,32 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geoj
     return magnitude * 4;
   }
 
-// Creating a GeoJSON layer with the retrieved data.
+// Create a GeoJSON layer with the retrieved data.
   L.geoJson(data, {
     	// We turn each feature into a circleMarker on the map.
     	pointToLayer: function(feature, latlng) {
       		console.log(data);
       		return L.circleMarker(latlng);
         },
-      // We set the style for each circleMarker using our styleInfo function.
+      // Set the style for each circleMarker using our styleInfo function.
     style: styleInfo,
-     // We create a popup for each circleMarker to display the magnitude and location of the earthquake
+     // Create a popup for each circleMarker to display the magnitude and location of the earthquake
      //  after the marker has been created and styled.
      onEachFeature: function(feature, layer) {
       layer.bindPopup("Magnitude: " + feature.properties.mag + "<br>Location: " + feature.properties.place);
     }
   }).addTo(allEarthquakes);
 
-  // Then we add the earthquake layer to our map.
+  // Add the earthquake layer to our map.
   allEarthquakes.addTo(map);
 
 
-// Here we create a legend control object.
+// Create a legend control object.
 let legend = L.control({
   position: "bottomright"
 });
 
-// Then add all the details for the legend
+// Add all the details for the legend
 legend.onAdd = function() {
   let div = L.DomUtil.create("div", "info legend");
 
@@ -151,10 +151,10 @@ legend.onAdd = function() {
     return div;
   };
 
-  // Finally, we our legend to the map.
+  // Add legend to the map.
   legend.addTo(map);
 
-  // Here we make an AJAX call to get our Tectonic Plate geoJSON data.
+  // Make a call to get our Tectonic Plate geoJSON data.
   d3.json("https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json").then(function(platedata) {
       // Adding our geoJSON data, along with style information, to the tectonicplates
       // layer.
@@ -164,7 +164,7 @@ legend.onAdd = function() {
       })
       .addTo(tectonicplates);
 
-      // Then add the tectonicplates layer to the map.
+      // Add the tectonic plates layer to the map.
       tectonicplates.addTo(map);
     });
 });
