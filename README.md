@@ -1,4 +1,4 @@
-# Mapping_Earthquakes
+# Mapping Earthquakes
 Mapping Earthquakes with JS &amp; APIs
 
 ## Main Objectives: 
